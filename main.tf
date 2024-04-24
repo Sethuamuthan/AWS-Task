@@ -1,3 +1,39 @@
+# Create VPC
+resource "aws_vpc" "my_vpcsethu" {
+  cidr_block = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  tags = {
+    Name = "Myvpc24"
+  }
+}
+
+# Create internet gateway
+resource "aws_internet_gateway" "my_igw" {
+  vpc_id = aws_vpc.my_vpcsethu.id
+  tags = {
+    Name = "Myigw24"
+  }
+}
+
+# Create subnet
+resource "aws_subnet" "my_subnet" {
+  vpc_id     = aws_vpc.my_vpcsethu.id
+  cidr_block = "10.0.1.0/24"
+  tags = {
+    Name = "Mysubnet24"
+  }
+}
+
+# Create IAM user
+resource "aws_iam_user" "my_uservpcofsethu" {
+  name = "my_user"
+}
+
+# Attach IAM policy to user
+resource "aws_iam_user_policy_attachment" "attach" {
+  user       = aws_iam_user.my_uservpcofsethu.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess" # Example policy, change to desired policy ARNN #Modify the access if needed
+}
 
 # Create an IAM Role
 resource "aws_iam_role" "example_role" {
